@@ -1,0 +1,95 @@
+sf::RenderWindow window(sf::VideoMode({800, 600}), "EcoSystemSim");
+ while(window.isOpen()){
+        sf::Event event;
+        while(window.pollEvent(event)){
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+        window.clear(sf::Color::Black);
+        window.draw(Tri);
+        window.display();
+    }
+
+
+
+
+For setting up a shape(circle here), filling it and giiving and outline.
+sf::CircleShape shape(50.f);
+shape.setFillColor(sf::Color(150, 50, 250));
+shape.setOutlineThickness(10.f);
+shape.setOutlineColor(sf::Color(250, 150, 100));
+
+sf::RectangleShape -> allows for you to make a rectangle
+shape.setSize -> allows you for setting up setSize
+
+// define a triangle
+sf::CircleShape triangle(80.f, 3);
+
+// define a square
+sf::CircleShape square(80.f, 4);
+
+// define an octagon
+sf::CircleShape octagon(80.f, 8);
+
+// create an empty shape
+sf::ConvexShape convex;
+
+// resize it to 5 points
+convex.setPointCount(5);
+
+// define the points
+convex.setPoint(0, {0.f, 0.f});
+convex.setPoint(1, {150.f, 10.f});
+convex.setPoint(2, {120.f, 90.f});
+convex.setPoint(3, {30.f, 100.f});
+convex.setPoint(4, {0.f, 50.f});
+
+//lines
+sf::RectangleShape line({150.f, 5.f});
+line.rotate(sf::degrees(45));
+
+//custom shape's format 
+class EllipseShape : public sf::Shape
+{
+public:
+    explicit EllipseShape(sf::Vector2f radius = {0, 0}) : m_radius(radius)
+    {
+        update();
+    }
+
+    void setRadius(sf::Vector2f radius)
+    {
+        m_radius = radius;
+        update();
+    }
+
+    sf::Vector2f getRadius() const
+    {
+        return m_radius;
+    }
+
+    std::size_t getPointCount() const override
+    {
+        return 30; // fixed, but could be an attribute of the class if needed
+    }
+
+    sf::Vector2f getPoint(std::size_t index) const override
+    {
+        static constexpr float pi = 3.141592654f;
+
+        float angle = index * 2 * pi / getPointCount() - pi / 2;
+        float x     = std::cos(angle) * m_radius.x;
+        float y     = std::sin(angle) * m_radius.y;
+
+        return m_radius + sf::Vector2f(x, y);
+    }
+
+private:
+    sf::Vector2f m_radius;
+};
+
+//to add antialiasing 
+sf::ContextSettings settings;
+settings.antiAliasingLevel = 8;
+
+sf::RenderWindow window(sf::VideoMode({800, 600}), "SFML shapes", sf::Style::Default, sf::State::Windowed, settings);

@@ -141,7 +141,13 @@ SFML Renderer
         ↓
 Interactive Visual World
 ```
-
+---
+## To run
+``` bash
+cmake -S . -B build
+cmake --build build
+```
+---
 ## Project Goal
 
 The goal is not to build a full game.

@@ -39,7 +39,7 @@ Before implementing the main procedural systems, the project covers the fundamen
 * [x] Game loop
 * [x] Delta time
 * [x] Movement
-* [ ] Coordinates and transformations
+* [x] Coordinates and transformations
 * [ ] Keyboard and mouse input
 * [ ] Multiple objects
 * [ ] Grid rendering

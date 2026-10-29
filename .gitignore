@@ -5,6 +5,7 @@ build/
 bin/
 lib/
 out/
+.pytest_cache/
 
 # CMake Generated Files
 CMakeFiles/

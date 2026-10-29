@@ -191,4 +191,11 @@ def run_terminal_stress_tests(
                 np.mean(shocked_terminal_values - baseline_terminal_values)
             ),
         })
+        print(
+    name,
+    "Expected terminal value:",
+    metrics["expected_terminal_value"],
+    "Mean change:",
+    np.mean(shocked_terminal_values - baseline_terminal_values),
+)
     return pd.DataFrame(scenario_rows)

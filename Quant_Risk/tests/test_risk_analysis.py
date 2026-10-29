@@ -137,3 +137,39 @@ def test_invalid_volatility_multiplier_rejected(setup_data):
             **setup_data,
             volatility_multipliers=(-1.0,),
         )
+
+
+def test_stress_mean_change_matches_expected_value_difference(setup_data):
+    from simulation import simulate_gbm
+
+    paths = simulate_gbm(
+        initial_prices=setup_data["initial_prices"],
+        drift=setup_data["drift"],
+        volatility=setup_data["volatility"],
+        correlation=setup_data["correlation"],
+        time_horizon=setup_data["time_horizon"],
+        steps=setup_data["steps"],
+        n_simulations=setup_data["n_simulations"],
+        seed=setup_data["seed"],
+    )
+
+    result = run_terminal_stress_tests(
+        price_paths=paths,
+        weights=setup_data["weights"],
+        initial_capital=setup_data["initial_capital"],
+        scenarios={"Market decline": np.array([-0.20, -0.20])},
+    )
+
+    baseline = result.loc[result["Scenario"] == "Baseline"].iloc[0]
+    stressed = result.loc[
+        result["Scenario"] == "Market decline"
+    ].iloc[0]
+
+    expected_difference = (
+        stressed["Expected Terminal Value ($)"]
+        - baseline["Expected Terminal Value ($)"]
+    )
+
+    assert stressed["Mean Change vs Baseline ($)"] == pytest.approx(
+        expected_difference
+    )

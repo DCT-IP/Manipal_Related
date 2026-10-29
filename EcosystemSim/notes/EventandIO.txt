@@ -1,0 +1,104 @@
+sf::Event:-
+ is a union i.e. only one of its members is valid
+ at a time. the valid member is the one that 
+ matches the event type.
+the instances are filled by the pollEvent function
+of the sf::Window class. Only the two funct can produce valid events
+
+event loop:
+sf::Event event;
+//while there are pending events
+while(window.pollEvent(event)){
+    //check the type of event
+    switch(event.type)
+    {
+        case sf::Event::Closed:
+          window.close();
+          break;
+        case sf::Event::KeyPressed:
+          ...
+          break;
+        default: brk;
+    }
+}
+
+The closed event
+sf::Event::Closed - triggered when the user wants to close the window
+if(event.type == sf::Event::Closed)
+  window.close();
+
+key and mouse BS
+if (event.type == sf::Event::KeyPressed)
+{
+    if (event.key.scancode == sf::Keyboard::Scan::Escape)
+    {
+        //wah
+    }
+}
+if (event.type == sf::Event::MouseWheelScrolled)
+{
+    if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
+        std::cout << "wheel type: vertical" << std::endl;
+    else if (event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
+        std::cout << "wheel type: horizontal" << std::endl;
+    else
+        std::cout << "wheel type: unknown" << std::endl;
+    std::cout << "wheel movement: " << event.mouseWheelScroll.delta << std::endl;
+    std::cout << "mouse x: " << event.mouseWheelScroll.x << std::endl;
+    std::cout << "mouse y: " << event.mouseWheelScroll.y << std::endl;
+}
+
+window.setKeyRepeatEnabled(false); -> to stop the hold 
+
+
+#include <iostream>
+#include <SFML/Graphics.hpp>
+
+// --- Application state ---
+// TODO: Add variables representing your application/simulation state.
+
+int main() {
+    // 1. Initialize state
+    // TODO: Initialize application data.
+
+    // 2. Create window
+    sf::RenderWindow window(
+        sf::VideoMode({800, 600}),
+        "EcoSystemSim"
+    );
+
+    // TODO: Configure window settings if needed.
+
+    // 3. Main application loop
+    while (window.isOpen()) {
+
+        // A. EVENT PROCESSING
+        sf::Event event;
+
+        while (window.pollEvent(event)) {
+            // TODO: Handle window close.
+
+            // TODO: Handle one-time keyboard actions.
+            sf::Keyboard::Scan:: here 
+            // TODO: Handle mouse events.
+        }
+
+        // B. INPUT / UPDATE
+        // TODO: Check held keys.
+        sf::Keyboard::isKeyPressed(sf::Keyboard::) here
+        // TODO: Update application or simulation state.
+
+        // C. RENDER
+        window.clear(sf::Color::Black);
+
+        // TODO: Draw objects / grid / visualization.
+
+        window.display();
+    }
+
+    // 4. Cleanup / final output
+    // TODO: Print final statistics or save results if needed.
+
+    return 0;
+}
+--------------------------------onto mouse inputs----------------------------------------------

@@ -40,7 +40,7 @@ Before implementing the main procedural systems, the project covers the fundamen
 * [x] Delta time
 * [x] Movement
 * [x] Coordinates and transformations
-* [ ] Keyboard and mouse input
+* [x] Keyboard and mouse input
 * [ ] Multiple objects
 * [ ] Grid rendering
 * [ ] Data/rendering separation

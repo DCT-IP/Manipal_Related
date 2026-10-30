@@ -39,8 +39,9 @@ coverage.xml
 .streamlit/secrets.toml
 
 # Generated simulation output
-results/
-outputs/
+# Benchmark results
+/benchmarks/results/*
+!/benchmarks/results/.gitkeepoutputs/
 *.npy
 *.npz
 *.parquet

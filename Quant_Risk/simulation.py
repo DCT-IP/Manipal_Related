@@ -31,6 +31,9 @@ def simulate_gbm(
     seed : int or None
         Random seed for reproducibility.
 
+        The usage of the GBM for as single asset gives us two theoretical benchmarks:
+                                    E[St] = S(0)*e^(myu*T)
+                                    Var(St) = S(0)^2*e^(2myuT) * ((e^(sigma^2)*T) - 1)
     Returns
     -------
     np.ndarray

@@ -1,138 +1,172 @@
-Here is the polished and properly formatted version of your project documentation. I have updated the LaTeX syntax to use standard Markdown delimiters (`$$` for display equations and `$` for inline variables) and enhanced the overall layout for clarity and readability.
-
----
-
 # QUANT//RISK
 
 **Monte Carlo Portfolio Risk & Scenario Analysis Engine**
 
-QUANT//RISK is a quantitative finance project designed for simulating portfolio outcomes, measuring downside risk, and studying the effects of diversification under uncertainty. The engine leverages Geometric Brownian Motion (GBM) to generate correlated asset-price paths and estimates portfolio risk through robust Monte Carlo simulation.
+QUANT//RISK is a quantitative finance project for simulating portfolio outcomes, measuring downside risk, and analysing diversification under uncertainty.
 
----
+It uses correlated Geometric Brownian Motion (GBM) to generate asset-price paths and Monte Carlo methods to estimate portfolio performance and risk. The project also explores sensitivity analysis, hypothetical market stress scenarios, and simulation performance.
 
 ## Features
 
-* **Monte Carlo Simulation:** Generate multiple correlated asset-price paths.
-* **Portfolio Customization:** Configure custom asset returns, correlations, and portfolio allocations.
-* **Risk Metrics:** Calculate Value at Risk (VaR) at 95% and 99% confidence levels.
-* **Tail Risk:** Measure Conditional Value at Risk (CVaR) / Expected Shortfall.
-* **Distribution Analysis:** Evaluate the probability of portfolio loss and terminal-value distributions.
-* **Diversification Studies:** Perform comparative sensitivity and allocation analyses.
-* **Interactive Dashboard:** Use interactive visualizations and configurable simulation parameters via a web interface.
-* **Reliability:** Includes reproducible simulations and automated testing suites.
-
----
+- **Monte Carlo Simulation:** Generate correlated asset-price paths using GBM.
+- **Portfolio Customization:** Configure asset parameters, correlations, and portfolio allocations.
+- **Risk Metrics:** Calculate Value at Risk (VaR) at 95% and 99% confidence levels.
+- **Tail Risk Analysis:** Calculate Conditional Value at Risk (CVaR), also known as Expected Shortfall.
+- **Distribution Analysis:** Examine terminal portfolio values, expected returns, and probability of loss.
+- **Sensitivity Analysis:** Study the effect of changing asset volatility on portfolio outcomes.
+- **Stress Testing:** Evaluate portfolio behaviour under hypothetical market scenarios.
+- **Interactive Dashboard:** Explore simulation results through Streamlit and Plotly visualizations.
+- **Simulation Optimization:** Use chunked computation to reduce temporary memory consumption.
+- **Testing and Validation:** Includes automated tests for GBM theory, correlation, numerical behaviour, and edge cases.
 
 ## Technology Stack
 
-* **Language:** Python
-* **Data Science & Math:** NumPy, SciPy, pandas
-* **Web Framework:** Streamlit
-* **Visualization:** Plotly
-* **Testing:** pytest
-
----
+| Category | Technologies |
+|---|---|
+| Language | Python |
+| Numerical Computing | NumPy, SciPy |
+| Data Processing | pandas |
+| Dashboard | Streamlit |
+| Visualization | Plotly |
+| Testing | pytest |
+| Benchmarking | psutil, tracemalloc |
 
 ## Getting Started
 
 ### Requirements
 
-* Python 3.11 or newer
-* `pip`
-* A modern web browser
+- Python 3.11 or newer
+- pip
+- A modern web browser
 
 ### Installation
 
-Clone the repository and set up a virtual environment:
+Clone the repository:
 
 ```bash
 git clone <repository-url>
-cd quant-risk
-python -m venv .venv
-
+cd Quant_Risk
 ```
 
-**Activate the Environment:**
+Create a virtual environment:
 
-* **Windows (PowerShell):**
+```bash
+python -m venv .venv
+```
+
+**Activate the environment**
+
+Windows (PowerShell):
+
 ```powershell
 .venv\Scripts\Activate.ps1
-
 ```
 
+Linux / macOS:
 
-* **Linux / macOS:**
 ```bash
 source .venv/bin/activate
-
 ```
 
-
-
-**Install Dependencies:**
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
-
 ```
 
 ### Run the Application
 
 ```bash
 streamlit run app.py
-
 ```
 
-*Streamlit will provide a local URL to access the interactive dashboard in your web browser.*
+Streamlit will provide a local URL for accessing the interactive dashboard.
 
 ### Run Tests
 
 ```bash
-pytest
-
+python -m pytest
 ```
 
----
-
 ## Methodology
+### 1. Geometric Brownian Motion
+Asset prices are modelled using the Geometric Brownian Motion stochastic differential equation:
 
-### Geometric Brownian Motion
+$$
+dS_t = \mu S_t\,dt + \sigma S_t\,dW_t
+$$
 
-Asset prices are simulated using the stochastic differential equation solved discretely as:
+Its exact discrete-time solution is:
 
-$$S_{t+\Delta t}=S_t\exp\left[ \left(\mu-\frac{\sigma^2}{2}\right)\Delta t +\sigma\sqrt{\Delta t}Z \right]$$
+$$
+S_{t+\Delta t}
+=
+S_t \exp\left[
+\left(\mu-\frac{\sigma^2}{2}\right)\Delta t
++
+\sigma\sqrt{\Delta t}Z
+\right]
+$$
 
-where $S_t$ is the asset price, $\mu$ is the annualized drift, $\sigma$ is annualized volatility, and $Z$ is a standard-normal random variable scaled for the simulation time step. Correlated random shocks are applied to accurately model relationships across different portfolio assets.
+Where:
+- $S_t$ is the asset price at time $t$.
+- $\mu$ is the annualized drift.
+- $\sigma$ is the annualized volatility.
+- $\Delta t$ is the simulation time interval.
+- $Z$ is a standard normally distributed random variable.
+For multiple assets, correlated random shocks are generated using a correlation matrix and Cholesky decomposition.
+This allows the simulation to model dependencies between portfolio assets rather than treating their price movements as independent.
 
-### Risk Metrics
+### 2. Portfolio Simulation
+The simulated asset prices are combined according to portfolio allocations to evaluate portfolio value over time.
+The engine supports comparisons between alternative allocations and examines how asset correlations influence portfolio outcomes.
 
-* **Value at Risk (VaR):** The loss quantile at a specified confidence level.
-* **Conditional Value at Risk (CVaR):** The average loss expected in the corresponding worst-tail scenarios.
-* **Probability of Loss:** The proportion of simulated outcomes falling below the initial portfolio value.
-* **Diversification Analysis:** Direct comparison of portfolio risk profiles under alternative allocations and correlation assumptions.
+### 3. Risk Metrics
 
----
+**Value at Risk (VaR)**
+Estimates the loss threshold that is exceeded with a specified probability over the simulation horizon.
+
+**Conditional Value at Risk (CVaR)**
+Also known as Expected Shortfall, estimates the average loss in the worst tail of the simulated loss distribution.
+
+**Probability of Loss**
+Measures the proportion of simulated terminal portfolio values that fall below the initial portfolio value.
+
+**Sensitivity and Stress Analysis**
+Examines how changes in volatility and hypothetical market conditions affect portfolio outcomes and downside risk.
+
+## Simulation Performance
+The simulation engine uses chunked computation to reduce the memory overhead associated with large intermediate arrays.
+Initial benchmarking compared the original implementation with the optimized implementation.
+At 100,000 simulations, using three assets and 252 time steps:
+
+| Metric | Original | Chunked |
+|---|---:|---:|
+| Runtime | 4.48 s | 1.78 s |
+| Peak traced memory | 3,463 MB | 752 MB |
+
+This represents approximately:
+- 60.3% lower execution time.
+- 78.3% lower peak traced memory.
+Additional benchmarks examine chunk-size selection and scaling across different asset counts and time steps.
+Detailed methodology and results are available in [`benchmarks/README.md`](benchmarks/README.md).
 
 ## Assumptions and Limitations
+The baseline GBM model assumes:
+- Constant drift over the simulation horizon.
+- Constant volatility.
+- Normally distributed asset log returns.
+- A fixed correlation structure.
+- Continuous trading and no explicit transaction costs.
 
-The baseline GBM model assumes constant drift, constant volatility, and normally distributed log returns. Real-world financial markets frequently exhibit fat tails, volatility clustering, sudden market jumps, liquidity constraints, and shifting correlations over time.
+Actual financial markets may exhibit fat-tailed returns, volatility clustering, sudden price jumps, liquidity constraints, and changing correlations.
+Consequently, the simulation results are conditional on the selected model assumptions and input parameters.
 
-> **Note:** The outputs generated by this engine are model-dependent estimates rather than guaranteed financial forecasts. Past parameter estimates do not guarantee future performance.
-
----
-
-## Cost
-
-This project is designed to run locally using free, open-source software. It requires no paid data feeds, proprietary API keys, or hosted cloud services.
-
----
+**Important:** Model outputs are estimates, not guaranteed financial forecasts.
 
 ## Disclaimer
-
-QUANT//RISK is an educational quantitative-finance and risk-modelling project. It is **not** financial or investment advice and should not be used as the sole basis for real-world financial or trading decisions.
-
----
+QUANT//RISK is an educational quantitative-finance and risk-modelling project.
+It is not financial or investment advice and should not be used as the sole basis for real-world financial or trading decisions.
 
 ## License
-
-Distributed under the MIT License — see the `LICENSE` file for details.
+Distributed under the MIT License. See the `LICENSE` file for details.

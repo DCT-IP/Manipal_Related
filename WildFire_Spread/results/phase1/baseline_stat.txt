@@ -1,0 +1,27 @@
+Individual simulation:-
+Metric	           Result
+Grid size	       50 × 50
+Total cells	        2,500
+Burned cells	    2,166
+Burned percentage	86.64%
+
+Monte Carlo experiment
+Statistic	            Result
+Number of runs	         300
+Mean burned area	    75.80%
+Median burned area	    85.40%
+Minimum burned area	     0.04%
+Maximum burned area	     90.12%
+Standard deviation 	     26.77%
+25th percentile (Q1)	 82.90%
+75th percentile (Q3)	 87.00%
+IQR	                     4.10$
+Small fires (≤1%)	      32%
+Small-fire frequency	10.67%
+
+measuring parameters:
+- Grid size: 50 × 50
+- Ignition point: (25, 25)
+- Spread probability: 0.3
+- Monte Carlo runs: 300
+- Random seed: 4

@@ -46,6 +46,13 @@ burn_probability, burned_areas = run_monte_carlo(
     n_runs=N_RUNS,
     seed=SEED
 )
+print("25th percentile:", np.percentile(burned_areas, 25))
+print("75th percentile:", np.percentile(burned_areas, 75))
+
+small_fires = np.count_nonzero(burned_areas <= 1.0)
+
+print("Small fires (<= 1%):", small_fires)
+print("Small fire frequency:", small_fires / N_RUNS * 100)
 
 
 print("\nMonte Carlo results")
